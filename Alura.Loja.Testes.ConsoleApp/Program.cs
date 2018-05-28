@@ -10,62 +10,37 @@ namespace Alura.Loja.Testes.ConsoleApp
     {
         static void Main(string[] args)
         {
-            //GravarUsandoAdoNet();
-            //GravarUsandoEntity();
-            //RecuperarProdutos();
-            //ExcluirProdutos();
-            AtualizaProduto();
-        }
-
-        private static void AtualizaProduto()
-        {
-            // inclui um produto
-
-            // atualiza o produto
-            using (var repo = new ProdutoDAOEntity())
+            using (var contexto = new LojaContext())
             {
-                Produto primeiro = repo.Produtos.First();
-                primeiro.Nome = "Cassino Royale - Editado";
-                repo.Adicionar(primeiro);
-            }
-            RecuperarProdutos();
-        }
-
-        private static void ExcluirProdutos()
-        {
-            using (var repo = new ProdutoDAOEntity())
-            {
-                IList<Produto> produtos = repo.Produtos();
-                foreach (var item in produtos)
+                var produtos = contexto.Produtos.ToList();
+                foreach (var p in produtos)
                 {
-                    repo.Remover(item);
+                    Console.WriteLine(p);
                 }
-            }
-        }
 
-        private static void RecuperarProdutos()
-        {
-            using (var repo = new ProdutoDAOEntity())
-            {
-                IList<Produto> produtos = repo.Produtos();
-                Console.WriteLine("Foram encontrados {0} produto(s).", produtos.Count);
-                foreach (var item in produtos)
+                Console.WriteLine("=================");
+                foreach (var e in contexto.ChangeTracker.Entries())
                 {
-                    Console.WriteLine(item.Nome);
+                    Console.WriteLine(e.State);
                 }
-            }
-        }
 
-        private static void GravarUsandoEntity()
-        {
-            Produto p = new Produto();
-            p.Nome = "Cassino Royale";
-            p.Categoria = "Filmes";
-            p.Preco = 19.89;
+                var p1 = produtos.Last();
+                p1.Nome = "007 - O Espiao Que Me Amava";
 
-            using (var repo = new ProdutoDAOEntity())
-            {
-                repo.Adicionar(p);
+                Console.WriteLine("=================");
+                foreach (var e in contexto.ChangeTracker.Entries())
+                {
+                    Console.WriteLine(e.State);
+                }
+
+                //contexto.SaveChages();
+
+                //Console.WriteLine("=================");
+                //produtos = contexto.Produtos.ToList();
+                //foreach (var p in produtos)
+                //{
+                //    Console.WriteLine(p);
+                //}
             }
         }
     }
