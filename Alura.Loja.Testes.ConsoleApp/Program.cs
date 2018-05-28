@@ -10,38 +10,24 @@ namespace Alura.Loja.Testes.ConsoleApp
     {
         static void Main(string[] args)
         {
+            //compra de 6 pães franceses
+            var paoFrances = new Produto();
+            paoFrances.Nome = "Pão Francês";
+            paoFrances.PrecoUnitario = 0.40;
+            paoFrances.Unidade = "Unidade";
+            paoFrances.Categoria = "Padaria";
+
+            var compra = new Compra();
+            compra.Quantidade = 6;
+            compra.Produto = paoFrances;
+            compra.Preco = paoFrances.PrecoUnitario * compra.Quantidade;
+
             using (var contexto = new LojaContext())
             {
-                var produtos = contexto.Produtos.ToList();
-                foreach (var p in produtos)
-                {
-                    Console.WriteLine(p);
-                }
-
-                Console.WriteLine("=================");
-                foreach (var e in contexto.ChangeTracker.Entries())
-                {
-                    Console.WriteLine(e.State);
-                }
-
-                var p1 = produtos.Last();
-                p1.Nome = "007 - O Espiao Que Me Amava";
-
-                Console.WriteLine("=================");
-                foreach (var e in contexto.ChangeTracker.Entries())
-                {
-                    Console.WriteLine(e.State);
-                }
-
-                //contexto.SaveChages();
-
-                //Console.WriteLine("=================");
-                //produtos = contexto.Produtos.ToList();
-                //foreach (var p in produtos)
-                //{
-                //    Console.WriteLine(p);
-                //}
+                contexto.Compras.Add(compra);
+                contexto.SaveChanges();
             }
         }
     }
 }
+
